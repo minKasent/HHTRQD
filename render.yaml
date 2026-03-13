@@ -22,4 +22,4 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: CORS_ORIGINS
-        value: '["https://your-app.vercel.app"]'
+        value: '["https://hhtrqd.vercel.app"]'
