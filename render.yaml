@@ -1,0 +1,24 @@
+databases:
+  - name: student-housing-db
+    plan: free
+    databaseName: student_housing_dss
+    user: admin
+
+services:
+  - type: web
+    name: student-housing-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: student-housing-db
+          property: connectionString
+        # Render provides psycopg2 URL; override for asyncpg
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: '["https://your-app.vercel.app"]'

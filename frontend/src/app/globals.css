@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 24% 97%;
+    --foreground: 138 13% 20%;
+    --card: 40 20% 98%;
+    --card-foreground: 138 13% 20%;
+    --primary: 138 13% 20%;
+    --primary-foreground: 45 24% 97%;
+    --secondary: 30 20% 93%;
+    --secondary-foreground: 138 13% 20%;
+    --muted: 40 15% 93%;
+    --muted-foreground: 138 6% 45%;
+    --accent: 40 20% 92%;
+    --accent-foreground: 138 13% 20%;
+    --destructive: 0 55% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 18% 88%;
+    --input: 40 18% 88%;
+    --ring: 105 10% 56%;
+    --radius: 1.5rem;
+
+    --sage: 105 10% 56%;
+    --terracotta: 14 44% 58%;
+    --clay: 30 24% 81%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  [class*="CardTitle"] {
+    font-family: var(--font-heading), "Playfair Display", serif;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading), "Playfair Display", serif;
+  }
+
+  .text-sage {
+    color: hsl(var(--sage));
+  }
+
+  .bg-sage {
+    background-color: hsl(var(--sage));
+  }
+
+  .text-terracotta {
+    color: hsl(var(--terracotta));
+  }
+
+  .bg-terracotta {
+    background-color: hsl(var(--terracotta));
+  }
+
+  .text-clay {
+    color: hsl(var(--clay));
+  }
+
+  .bg-clay {
+    background-color: hsl(var(--clay));
+  }
+}
