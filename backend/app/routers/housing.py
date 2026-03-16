@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -40,7 +41,10 @@ async def get_housings(
 @router.get("/districts")
 async def get_districts(db: AsyncSession = Depends(get_db)):
     districts = await HousingService.get_districts(db)
-    return {"districts": districts}
+    return JSONResponse(
+        content={"districts": districts},
+        headers={"Cache-Control": "public, max-age=3600"},
+    )
 
 
 @router.get("/{housing_id}", response_model=HousingResponse)

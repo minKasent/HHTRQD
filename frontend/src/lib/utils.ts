@@ -25,3 +25,15 @@ export function formatDate(dateString: string): string {
 export function formatPercent(value: number): string {
   return `${(value * 100).toFixed(2)}%`;
 }
+
+export const QUALITY_COLORS: Record<string, string> = {
+  Budget: "bg-blue-100 text-blue-800",
+  Standard: "bg-amber-100 text-amber-800",
+  Premium: "bg-green-100 text-green-800",
+};
+
+export const QUALITY_HEX: Record<string, string> = {
+  Budget: "#3b82f6",
+  Standard: "#f59e0b",
+  Premium: "#22c55e",
+};

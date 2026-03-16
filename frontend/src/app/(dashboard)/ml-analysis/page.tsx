@@ -37,17 +37,12 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { PageSkeleton } from "@/components/common/LoadingSpinner";
 import { mlApi } from "@/lib/api";
+import { QUALITY_HEX } from "@/lib/utils";
 import type {
   ModelComparisonResponse,
   DatasetStats,
   HybridPrediction,
 } from "@/types";
-
-const QUALITY_COLORS: Record<string, string> = {
-  Budget: "#22c55e",
-  Standard: "#3b82f6",
-  Premium: "#f59e0b",
-};
 
 const DIRECTIONS = [
   { value: "Unknown", label: "Không rõ" },
@@ -306,7 +301,7 @@ export default function MLAnalysisPage() {
                         className="text-lg px-4 py-1"
                         style={{
                           backgroundColor:
-                            QUALITY_COLORS[prediction.quality.quality_label] ||
+                            QUALITY_HEX[prediction.quality.quality_label] ||
                             "#888",
                           color: "#fff",
                         }}
@@ -669,7 +664,7 @@ export default function MLAnalysisPage() {
                           {qualityPieData.map((entry) => (
                             <Cell
                               key={entry.name}
-                              fill={QUALITY_COLORS[entry.name] || "#888"}
+                              fill={QUALITY_HEX[entry.name] || "#888"}
                             />
                           ))}
                         </Pie>

@@ -40,7 +40,11 @@ export default function HousingPage() {
   const currentPage = filter.page ?? 1;
 
   const updateFilter = (updates: Partial<HousingFilter>) => {
-    setFilter((prev) => ({ ...prev, ...updates, page: updates.page ?? 1 }));
+    setFilter((prev) => ({
+      ...prev,
+      ...updates,
+      page: "page" in updates ? updates.page : 1,
+    }));
   };
 
   const resetFilters = () => {
@@ -219,7 +223,7 @@ export default function HousingPage() {
               variant="outline"
               size="sm"
               disabled={currentPage <= 1}
-              onClick={() => setFilter((prev) => ({ ...prev, page: currentPage - 1 }))}
+              onClick={() => updateFilter({ page: currentPage - 1 })}
             >
               <ChevronLeft className="mr-1 h-4 w-4" />
               Trước
@@ -228,7 +232,7 @@ export default function HousingPage() {
               variant="outline"
               size="sm"
               disabled={currentPage >= totalPages}
-              onClick={() => setFilter((prev) => ({ ...prev, page: currentPage + 1 }))}
+              onClick={() => updateFilter({ page: currentPage + 1 })}
             >
               Sau
               <ChevronRight className="ml-1 h-4 w-4" />

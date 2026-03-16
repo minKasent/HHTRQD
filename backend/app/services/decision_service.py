@@ -131,7 +131,13 @@ class DecisionService:
             delete(CriteriaComparison).where(CriteriaComparison.session_id == session_id)
         )
 
+        n = len(data.criteria_ids)
         for comp in data.comparisons:
+            if comp.i < 0 or comp.i >= n or comp.j < 0 or comp.j >= n:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Index so sánh ngoài phạm vi: i={comp.i}, j={comp.j}, n={n}",
+                )
             ci_id = data.criteria_ids[comp.i]
             cj_id = data.criteria_ids[comp.j]
             db.add(CriteriaComparison(
@@ -166,8 +172,14 @@ class DecisionService:
         )
 
         total = 0
+        nh = len(data.housing_ids)
         for alt_comp in data.comparisons_by_criteria:
             for comp in alt_comp.comparisons:
+                if comp.i < 0 or comp.i >= nh or comp.j < 0 or comp.j >= nh:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"Index so sánh ngoài phạm vi: i={comp.i}, j={comp.j}, n={nh}",
+                    )
                 hi_id = data.housing_ids[comp.i]
                 hj_id = data.housing_ids[comp.j]
                 db.add(AlternativeComparison(

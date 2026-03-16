@@ -3,6 +3,7 @@ ML Service: loads trained models and provides prediction methods.
 """
 
 import json
+from functools import lru_cache
 from pathlib import Path
 
 import joblib
@@ -30,6 +31,11 @@ def _load_models():
 
     with open(REPORT_PATH, "r", encoding="utf-8") as f:
         _report = json.load(f)
+
+
+@lru_cache(maxsize=1)
+def _load_processed_df() -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / "processed_housing.csv")
 
 
 def predict_price(area: float, bedrooms: int, toilets: int, district: str,
@@ -101,8 +107,7 @@ def get_model_comparison() -> dict:
 
 
 def get_dataset_stats() -> dict:
-    processed_csv = DATA_DIR / "processed_housing.csv"
-    df = pd.read_csv(processed_csv)
+    df = _load_processed_df()
 
     top_districts = df["district"].value_counts().head(10).to_dict()
     quality_dist = df["quality_label"].value_counts().to_dict()
@@ -122,6 +127,5 @@ def get_dataset_stats() -> dict:
 
 
 def get_available_districts() -> list[str]:
-    processed_csv = DATA_DIR / "processed_housing.csv"
-    df = pd.read_csv(processed_csv)
+    df = _load_processed_df()
     return sorted(df["district"].unique().tolist())

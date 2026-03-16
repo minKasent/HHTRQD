@@ -37,7 +37,8 @@ export default function CriteriaPage() {
       setShowCreate(false);
       setForm({ name: "", description: "", code: "", is_benefit: true, unit: "" });
     },
-    onError: (err: any) => toast.error(err.response?.data?.detail || "Thêm thất bại"),
+    onError: (err: Error & { response?: { data?: { detail?: string } } }) =>
+      toast.error(err.response?.data?.detail || "Thêm thất bại"),
   });
 
   const updateMutation = useMutation({
@@ -48,7 +49,8 @@ export default function CriteriaPage() {
       toast.success("Đã cập nhật tiêu chí");
       setEditItem(null);
     },
-    onError: (err: any) => toast.error(err.response?.data?.detail || "Cập nhật thất bại"),
+    onError: (err: Error & { response?: { data?: { detail?: string } } }) =>
+      toast.error(err.response?.data?.detail || "Cập nhật thất bại"),
   });
 
   const deleteMutation = useMutation({

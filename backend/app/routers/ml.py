@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, HTTPException
 
 from app.schemas.ml import (
@@ -17,6 +19,8 @@ from app.services.ml_service import (
     predict_quality,
 )
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/api/ml", tags=["Machine Learning"])
 
 
@@ -27,8 +31,11 @@ async def api_predict_price(req: PredictRequest):
             area=req.area, bedrooms=req.bedrooms, toilets=req.toilets,
             district=req.district, direction=req.direction, views=req.views,
         )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Model chưa được huấn luyện")
+    except Exception:
+        logger.exception("Price prediction failed")
+        raise HTTPException(status_code=500, detail="Dự đoán giá thất bại")
 
 
 @router.post("/predict/quality", response_model=QualityPrediction)
@@ -38,8 +45,11 @@ async def api_predict_quality(req: PredictRequest):
             area=req.area, bedrooms=req.bedrooms, toilets=req.toilets,
             district=req.district, direction=req.direction, views=req.views,
         )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Model chưa được huấn luyện")
+    except Exception:
+        logger.exception("Quality prediction failed")
+        raise HTTPException(status_code=500, detail="Dự đoán chất lượng thất bại")
 
 
 @router.post("/predict/hybrid", response_model=HybridPrediction)
@@ -49,29 +59,39 @@ async def api_predict_hybrid(req: PredictRequest):
             area=req.area, bedrooms=req.bedrooms, toilets=req.toilets,
             district=req.district, direction=req.direction, views=req.views,
         )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Model chưa được huấn luyện")
+    except Exception:
+        logger.exception("Hybrid prediction failed")
+        raise HTTPException(status_code=500, detail="Dự đoán thất bại")
 
 
 @router.get("/models/comparison", response_model=ModelComparisonResponse)
 async def api_model_comparison():
     try:
         return get_model_comparison()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load report: {str(e)}")
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Chưa có báo cáo so sánh model")
+    except Exception:
+        logger.exception("Model comparison failed")
+        raise HTTPException(status_code=500, detail="Không thể tải báo cáo model")
 
 
 @router.get("/dataset/stats", response_model=DatasetStatsResponse)
 async def api_dataset_stats():
     try:
         return get_dataset_stats()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load stats: {str(e)}")
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Không tìm thấy dữ liệu")
+    except Exception:
+        logger.exception("Dataset stats failed")
+        raise HTTPException(status_code=500, detail="Không thể tải thống kê dataset")
 
 
 @router.get("/districts")
 async def api_get_districts():
     try:
         return {"districts": get_available_districts()}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed: {str(e)}")
+    except Exception:
+        logger.exception("Get districts failed")
+        raise HTTPException(status_code=500, detail="Không thể tải danh sách quận")

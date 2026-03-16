@@ -68,9 +68,10 @@ export default function ComparisonPage() {
 
   const selectedCriteria = criteria.filter((c) => store.selectedCriteriaIds.includes(c.id));
 
+  const reset = store.reset;
   useEffect(() => {
-    store.reset();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    reset();
+  }, [reset]);
 
   const toggleHousing = (housing: Housing) => {
     const exists = selectedHousings.find((h) => h.id === housing.id);
@@ -110,7 +111,8 @@ export default function ComparisonPage() {
       store.setSessionId(data.id);
       store.nextStep();
     },
-    onError: (err: any) => toast.error(err.response?.data?.detail || "Tạo phiên thất bại"),
+    onError: (err: Error & { response?: { data?: { detail?: string } } }) =>
+      toast.error(err.response?.data?.detail || "Tạo phiên thất bại"),
   });
 
   const saveCriteriaMutation = useMutation({
@@ -124,7 +126,8 @@ export default function ComparisonPage() {
       setCurrentCriteriaTab(0);
       store.nextStep();
     },
-    onError: (err: any) => toast.error(err.response?.data?.detail || "Lưu thất bại"),
+    onError: (err: Error & { response?: { data?: { detail?: string } } }) =>
+      toast.error(err.response?.data?.detail || "Lưu thất bại"),
   });
 
   const saveAlternativesMutation = useMutation({
@@ -140,7 +143,8 @@ export default function ComparisonPage() {
       });
     },
     onSuccess: () => store.nextStep(),
-    onError: (err: any) => toast.error(err.response?.data?.detail || "Lưu thất bại"),
+    onError: (err: Error & { response?: { data?: { detail?: string } } }) =>
+      toast.error(err.response?.data?.detail || "Lưu thất bại"),
   });
 
   const calculateMutation = useMutation({
@@ -153,7 +157,8 @@ export default function ComparisonPage() {
       toast.success("Tính toán hoàn tất!");
       router.push(`/decision/${store.sessionId}`);
     },
-    onError: (err: any) => toast.error(err.response?.data?.detail || "Tính toán thất bại"),
+    onError: (err: Error & { response?: { data?: { detail?: string } } }) =>
+      toast.error(err.response?.data?.detail || "Tính toán thất bại"),
   });
 
   const canProceed = (): boolean => {

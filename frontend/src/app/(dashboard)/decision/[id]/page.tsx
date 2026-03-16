@@ -9,8 +9,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageSkeleton } from "@/components/common/LoadingSpinner";
-import { WeightChart, ScoreComparisonChart } from "@/components/ahp/WeightChart";
-import { RankingResult } from "@/components/ahp/RankingResult";
+import dynamic from "next/dynamic";
+
+const WeightChart = dynamic(() => import("@/components/ahp/WeightChart").then((m) => m.WeightChart), {
+  loading: () => <div className="h-[360px] animate-pulse rounded-2xl bg-muted" />,
+  ssr: false,
+});
+const ScoreComparisonChart = dynamic(() => import("@/components/ahp/WeightChart").then((m) => m.ScoreComparisonChart), {
+  loading: () => <div className="h-[360px] animate-pulse rounded-2xl bg-muted" />,
+  ssr: false,
+});
+const RankingResult = dynamic(() => import("@/components/ahp/RankingResult").then((m) => m.RankingResult), {
+  loading: () => <div className="h-[200px] animate-pulse rounded-2xl bg-muted" />,
+  ssr: false,
+});
 import { sessionApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { CalculationResult, ConsistencyInfo } from "@/types";

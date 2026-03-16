@@ -13,6 +13,8 @@ interface SaatySliderProps {
 const SCALE_VALUES = [9, 8, 7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 const SCALE_MAP = SCALE_VALUES.map((v, i) => (i < 8 ? 1 / SCALE_VALUES[i] : i === 8 ? 1 : SCALE_VALUES[i]));
 
+const TICK_LABELS = ["9", "", "7", "", "5", "", "3", "", "1", "", "3", "", "5", "", "7", "", "9"];
+
 function valueToIndex(val: number): number {
   if (val === 1) return 8;
   if (val > 1) return 8 + Math.round(val) - 1;
@@ -31,8 +33,18 @@ export function SaatySlider({ value, onChange, leftLabel, rightLabel }: SaatySli
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between text-sm">
-        <span className={cn("font-medium", favorsSide === "left" && "text-primary")}>{leftLabel}</span>
-        <span className={cn("font-medium", favorsSide === "right" && "text-primary")}>{rightLabel}</span>
+        <span className={cn(
+          "max-w-[40%] truncate font-medium",
+          favorsSide === "left" && "text-primary",
+        )}>
+          {leftLabel}
+        </span>
+        <span className={cn(
+          "max-w-[40%] truncate text-right font-medium",
+          favorsSide === "right" && "text-primary",
+        )}>
+          {rightLabel}
+        </span>
       </div>
 
       <div className="relative">
@@ -45,12 +57,23 @@ export function SaatySlider({ value, onChange, leftLabel, rightLabel }: SaatySli
           onChange={(e) => onChange(indexToValue(Number(e.target.value)))}
           className="w-full cursor-pointer accent-primary"
         />
-        <div className="flex justify-between px-1 text-[10px] text-muted-foreground">
-          {SCALE_VALUES.map((v, i) => (
-            <span key={i} className={cn(i === 8 && "font-bold text-foreground")}>
-              {i === 8 ? "1" : i < 8 ? "" : ""}
+        <div className="flex justify-between px-0.5 text-[10px] text-muted-foreground">
+          {TICK_LABELS.map((label, i) => (
+            <span
+              key={i}
+              className={cn(
+                "w-3 text-center",
+                i === 8 && "font-bold text-foreground",
+                i === sliderIndex && i !== 8 && "font-semibold text-primary",
+              )}
+            >
+              {label}
             </span>
           ))}
+        </div>
+        <div className="mt-0.5 flex justify-between px-0.5">
+          <span className="text-[9px] text-muted-foreground/60">← {leftLabel}</span>
+          <span className="text-[9px] text-muted-foreground/60">{rightLabel} →</span>
         </div>
       </div>
 

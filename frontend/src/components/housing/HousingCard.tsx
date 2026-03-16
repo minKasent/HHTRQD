@@ -3,6 +3,7 @@
 import { Bath, BedDouble, Eye, MapPin, Ruler } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { QUALITY_COLORS } from "@/lib/utils";
 import type { Housing } from "@/types";
 
 interface HousingCardProps {
@@ -11,12 +12,6 @@ interface HousingCardProps {
   selected?: boolean;
   onSelect?: () => void;
 }
-
-const QUALITY_COLORS: Record<string, string> = {
-  Budget: "bg-blue-100 text-blue-800",
-  Standard: "bg-amber-100 text-amber-800",
-  Premium: "bg-green-100 text-green-800",
-};
 
 export function HousingCard({ housing, selectable, selected, onSelect }: HousingCardProps) {
   return (

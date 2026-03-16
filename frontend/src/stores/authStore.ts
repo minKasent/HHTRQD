@@ -13,11 +13,10 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  isLoading: true,
+  isLoading: false,
   isAuthenticated: false,
 
   loadUser: async () => {
-    set({ isLoading: true });
     await ensureGuestAuth();
     try {
       const res = await authApi.me();
